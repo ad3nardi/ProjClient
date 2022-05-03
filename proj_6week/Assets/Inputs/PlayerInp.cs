@@ -199,7 +199,7 @@ public partial class @PlayerInp : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""2852216f-b9c4-47da-a4af-6f46a8d64982"",
-                    ""path"": """",
+                    ""path"": ""<Keyboard>/leftCtrl"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -221,22 +221,11 @@ public partial class @PlayerInp : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""ba243ce7-de8f-4d81-b3c9-935a313060cf"",
-                    ""path"": """",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Fire"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1fcd8b01-5906-46e2-84d4-53687d5f8e03"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
