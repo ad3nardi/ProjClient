@@ -111,7 +111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 0}
   camTran: {fileID: 0}
-  shockFlash: {fileID: 0}
+  anim: {fileID: 1262933076}
   freeCam: {fileID: 0}
   rotateSpd: 360
   moveSpd: 0
@@ -135,7 +135,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -4902,6 +4902,7 @@ GameObject:
   - component: {fileID: 1292947427328741064}
   - component: {fileID: 3490757350823926711}
   - component: {fileID: 5682529169054378033}
+  - component: {fileID: 1262933076}
   m_Layer: 0
   m_Name: visual
   m_TagString: Untagged
@@ -4972,3 +4973,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!95 &1262933076
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6619025183814555833}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

@@ -6,45 +6,37 @@ using UnityEngine.AI;
 public class statePatrol : IState
 {
     private readonly Enemy _enem;
-    private readonly NavMeshAgent _nma;
+    public NavMeshAgent _nma;
     private readonly Animator _anim;
     private readonly int Speed = Animator.StringToHash("speed");
 
     private Vector3 _lastPos = Vector3.zero;
     public float TimeStuck;
-    public int _curNode;
-    public bool _reachedPos;
+    public int _curNodeIndex;
 
-    public statePatrol(Enemy enem, NavMeshAgent nma, Animator anim, int curNode)
+    public statePatrol(Enemy enem, NavMeshAgent nma, Animator anim)
     {
         _enem = enem;
         _nma = nma;
         _anim = anim;
-        _curNode = curNode;
     }
 
     public void Tick()
     {
-        if (Vector3.Distance(_enem.transform.position, _lastPos) <= 0f)
+        if (Vector3.Distance(_enem.transform.position, _lastPos) <= 0.1f)
             TimeStuck += Time.deltaTime;
 
-            _lastPos = _enem.transform.position;
-
-        if (Vector3.Distance(_enem.transform.position, _nma.destination)<= 1)
-        {
-            _reachedPos = true;
-        }
+        _lastPos = _enem.transform.position;
     }
 
     public void OnEnter()
     {
+        Debug.Log("patroling");
         TimeStuck = 0f;
-        _reachedPos = false;
         _nma.enabled = true;
-        if (_curNode == _enem.PatrolNodes.Count - 1)
-            _curNode = 0;
 
-        _nma.SetDestination(_enem.PatrolNodes[_curNode].position);
+
+        _nma.SetDestination(_enem.PatrolNodes[_curNodeIndex].position);
         _anim.SetFloat(Speed, 1f);
     }
 
@@ -52,6 +44,10 @@ public class statePatrol : IState
     {
         _nma.enabled = false;
         _anim.SetFloat (Speed, 0f);
-        _enem._curNode++;
+
+        _curNodeIndex++;
+        /* wrap around nodes list when we reach max */
+        if (_curNodeIndex == _enem.PatrolNodes.Count)
+            _curNodeIndex = 0;
     }
 }

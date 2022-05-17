@@ -25,14 +25,14 @@ public class StateMachine
         if (_currentState != null)
         {
             _currentState.Tick();
-            statePatrol asPatrol = (statePatrol)_currentState;
-            if (asPatrol != null)
-            {
-                if (asPatrol._reachedPos)
-                {
-                    Debug.Log("YEAH BRO");
-                }
-            }
+            //statePatrol asPatrol = (statePatrol)_currentState;
+            //if (asPatrol != null)
+            //{
+            //    if (asPatrol._reachedPos)
+            //    {
+            //        Debug.Log("YEAH BRO");
+            //    }
+            //}
         }
     }
 
@@ -46,33 +46,46 @@ public class StateMachine
 
         _transitions.TryGetValue(_currentState.GetType(), out _currentTransitions);
 
-        if (_currentTransitions != null)
-            _currentTransitions = EmptyTransitions;
+        if (_currentTransitions == null)
+        {
+            //_currentTransitions = EmptyTransitions;
+            _currentTransitions = new List<Transition>();
+        }
+            
 
         _currentState.OnEnter();
     }
-    public void AddTransition(IState from, IState to, Func<bool> predicate)
+    public void AddTransition(IState from, IState to, conditionDelegate condition)
     {
+        //if (_transitions.ContainsKey(from.GetType()))
+        //{
+        //    var transitions = _transitions[from.GetType()];
+        //    transitions.Add(new Transition(to, condition));
+        //} else
+        //{
+        //    var transitions = new List<Transition>();
+        //    transitions.Add(new Transition(to, condition));
+        //    _transitions.Add(from.GetType(), transitions);
+        //}
         if (_transitions.TryGetValue(from.GetType(), out var transitions) == false)
         {
             transitions = new List<Transition>();
             _transitions[from.GetType()] = transitions;
         }
-
-        transitions.Add(new Transition(to, predicate));
+        transitions.Add(new Transition(to, condition));
     }
     
-    public void AddAnyTransition(IState state, Func<bool> predicate)
+    public void AddAnyTransition(IState state, conditionDelegate condition)
     {
-        _anyTransitions.Add(new Transition(state, predicate));
+        _anyTransitions.Add(new Transition(state, condition));
     }
 
     private class Transition
     {
-        public Func<bool> Condition { get; }
+        public conditionDelegate Condition { get; }
         public IState To { get; }
 
-        public Transition(IState to, Func<bool> condition)
+        public Transition(IState to, conditionDelegate condition)
         {
             To = to;
             Condition = condition;

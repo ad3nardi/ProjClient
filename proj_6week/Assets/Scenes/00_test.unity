@@ -896,7 +896,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 786377929}
-  m_LocalRotation: {x: 0.0029523356, y: -0.8060895, z: 0.0040215566, w: 0.5917726}
+  m_LocalRotation: {x: 0.0029523175, y: -0.8060895, z: 0.0040215314, w: 0.5917726}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1148,30 +1148,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1262933075 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6619025183814555833, guid: 6e71d9ec5ec51be4992e605c395c9fcd, type: 3}
-  m_PrefabInstance: {fileID: 6806252933455962089}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &1262933076
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1262933075}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1375294827
 GameObject:
   m_ObjectHideFlags: 0
@@ -1250,7 +1226,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1375294827}
-  m_LocalRotation: {x: -0.0056593874, y: -0.8060627, z: -0.007708996, w: 0.59175295}
+  m_LocalRotation: {x: -0.005659391, y: -0.8060627, z: -0.007709002, w: 0.59175295}
   m_LocalPosition: {x: 6.485475, y: 2.0678287, z: 2.0365474}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1502,10 +1478,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1294579852105721407, guid: 6e71d9ec5ec51be4992e605c395c9fcd, type: 3}
-      propertyPath: playOnAwake
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4506531320861865626, guid: 6e71d9ec5ec51be4992e605c395c9fcd, type: 3}
       propertyPath: m_Name
       value: pc
@@ -1515,10 +1487,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1375294829}
     - target: {fileID: 6806252933455962092, guid: 6e71d9ec5ec51be4992e605c395c9fcd, type: 3}
-      propertyPath: anim
-      value: 
-      objectReference: {fileID: 1262933076}
-    - target: {fileID: 6806252933455962092, guid: 6e71d9ec5ec51be4992e605c395c9fcd, type: 3}
       propertyPath: camTran
       value: 
       objectReference: {fileID: 1375294830}
@@ -1526,10 +1494,6 @@ PrefabInstance:
       propertyPath: freeCam
       value: 
       objectReference: {fileID: 171716521}
-    - target: {fileID: 6806252933455962092, guid: 6e71d9ec5ec51be4992e605c395c9fcd, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 9138241819514899393, guid: 6e71d9ec5ec51be4992e605c395c9fcd, type: 3}
       propertyPath: m_RootOrder
       value: 3

@@ -24,6 +24,7 @@ public class stateHold : IState
 
     public void OnEnter()
     {
+        Debug.Log("holding");
         HoldTime = 0f;
         _anim.SetFloat(Speed, 0f);
     }

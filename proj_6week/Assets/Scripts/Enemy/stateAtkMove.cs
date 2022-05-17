@@ -6,33 +6,35 @@ using UnityEngine.AI;
 public class stateAtkMove : IState
 {
     private readonly Enemy _enem;
-    private readonly NavMeshAgent _nma;
+    public NavMeshAgent _nma;
     private readonly Animator _anim;
+    private enemDetector _ED;
+    private readonly List<Transform> _SN;
+
     private readonly int Speed = Animator.StringToHash("speed");
 
-    private Vector3 _lastPos = Vector3.zero;
-    public float TimeStuck;
+    private Transform closestNode;
+    public float TimeInSearch;
+    private int _curNodeIndex;
 
-    public stateAtkMove(Enemy enem, NavMeshAgent nma, Animator anim)
+    public stateAtkMove(Enemy enem, NavMeshAgent nma, Animator anim, enemDetector ed)
     {
         _enem = enem;
         _nma = nma;
         _anim = anim;
+        _ED = ed;
     }
 
     public void Tick()
     {
-        if (Vector3.Distance(_enem.transform.position, _lastPos) <= 0f)
-            TimeStuck += Time.deltaTime;
 
-        _lastPos = _enem.transform.position;
     }
 
     public void OnEnter()
     {
-        TimeStuck = 0f;
+        Debug.Log("atkMoving");
         _nma.enabled = true;
-        _nma.SetDestination(_enem.transform.position);
+        _nma.SetDestination(_ED._pc.position);
         _anim.SetFloat(Speed, 1f);
     }
 
