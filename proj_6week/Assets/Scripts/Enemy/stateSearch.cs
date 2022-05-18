@@ -58,7 +58,6 @@ public class stateSearch : IState
     {
         _nma.enabled = false;
         _anim.SetFloat(Speed, 0f);
-        _ED.ResetDetectionTimer();
 
         /* wrap around nodes list when we reach max */
         if (_curNodeIndex == _enem.PatrolNodes.Count)

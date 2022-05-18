@@ -7,20 +7,29 @@ using UnityEngine.AI;
 public delegate bool conditionDelegate();
 public class Enemy : MonoBehaviour
 {
-    public event Action<int> OnEnemChange;
-    private StateMachine _stateMachine;
+    public PlayerCon _pc;
 
     [Header("Plugins")]
+    private StateMachine _stateMachine;
+    private enemDetector _enemDetector;
+    public GameObject _bulletPref;
+    public Transform _gunTrans;
     public List<Transform> PatrolNodes = new List<Transform>();
     public List<Transform> SearchNodes = new List<Transform>();
-    private enemDetector _enemDetector;
 
-    [Header("Settings")]
-    public float _range;
-    public float _holdTime;
-    public float _stunTime;
+    [Header("Stat Settings")]
+    [SerializeField] private float _range;
+    [SerializeField] private float _holdTime;
+    [SerializeField] private float _stunTime;
+    [SerializeField] private float _fireRate;
+    [SerializeField] private float _bulletSpd;
+
+    [Header("State Settings")]
     public float _maxSearchTime;
     public float _maxDetectTime;
+    public bool _canSearch;
+    public bool _canDetect;
+    public bool _isStunned;    
 
     /* state */
     stateHold hold;
@@ -33,12 +42,17 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
+        _canSearch = false;
+        _canDetect = false;
+        _isStunned = false;
         _enemDetector = GetComponentInChildren<enemDetector>();
+
         /* cached shit */
         var navMeshAgent = GetComponent<NavMeshAgent>();
         var animator = GetComponent<Animator>();
-        var fleeParticleSystem = gameObject.GetComponentInChildren<ParticleSystem>();
         var enemDetector = _enemDetector;
+        var fireRate = _fireRate;
+        var fleeParticleSystem = gameObject.GetComponentInChildren<ParticleSystem>();
 
         _stateMachine = new StateMachine();
 
@@ -48,23 +62,26 @@ public class Enemy : MonoBehaviour
         search  = new stateSearch   (this, navMeshAgent, animator, enemDetector, SearchNodes);
         detect  = new stateDetect   (this, navMeshAgent, animator);
         atkMove = new stateAtkMove  (this, navMeshAgent, animator, enemDetector);
-        attack  = new stateAttack   (this, navMeshAgent, animator);
+        attack  = new stateAttack   (this, animator,     fireRate);
         stunned = new stateStunned  (this, navMeshAgent, animator);
 
         /* create the transitions */
         _stateMachine.AddTransition(hold,       patrol, isHeldPoint);
         _stateMachine.AddTransition(patrol,     hold,   isReachedPatrolPoint);
+
+        _stateMachine.AddTransition(hold,       search, isSearching);
+        _stateMachine.AddTransition(patrol,     search, isSearching);
+
+        _stateMachine.AddTransition(search,     atkMove,isDetecting);
+        _stateMachine.AddTransition(search,     hold,   isReachedSearchPoint);
+
         _stateMachine.AddTransition(atkMove,    attack, inAttackRange);
 
-        /* create any Transisionts - break points */
-        _stateMachine.AddAnyTransition(search,  isSearching);
+        /* create ANY Transisionts - BREAK POINTS */
         _stateMachine.AddAnyTransition(stunned, isStunned);
 
-        /* create transitions out of break points */
+        /* create transitions OUT of BREAK points */
         _stateMachine.AddTransition(stunned,    attack, stunOut);
-        _stateMachine.AddTransition(search,     hold,   isReachedSearchPoint);
-        _stateMachine.AddTransition(search,     atkMove,isDetecting);
-
 
         /* initial state */
         _stateMachine.SetState(patrol);
@@ -73,6 +90,13 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         _stateMachine.Tick();
+    }
+    /* ACTION FUNCTIONS */
+    public void Fire()
+    {
+        transform.LookAt(_pc.transform.position);
+        GameObject go = Instantiate(_bulletPref, _gunTrans.transform.position, _gunTrans.rotation);
+        go.GetComponent<Rigidbody>().AddForce(_gunTrans.transform.forward * _bulletSpd, ForceMode.Impulse);
     }
 
     /* CONDITIONS */
@@ -95,25 +119,24 @@ public class Enemy : MonoBehaviour
         bool reachedRange = Vector3.Distance(transform.position, atkMove._nma.destination) <= _range;
         return reachedRange;
     }
-    
-    private bool isStunned()
-    {
-        return false;
-    }
     private bool stunOut()
     {
-        return stunned.StunTime >= _stunTime;
+        bool stunTimeReached = stunned.StunTime >= _stunTime;
+        return stunTimeReached;
     }
 
     /* Public Conditions - CALLED FROM OUTSIDE - */
+    public bool isStunned()
+    {
+        return _isStunned;
+    }
     public bool isSearching()
     {
-        bool serachTimeReached = _enemDetector.DetectionTime() >= _maxSearchTime;
-        return serachTimeReached;
+        return _canSearch;
     }
     public bool isDetecting()
     {
-        bool detectTimeReached = _enemDetector.DetectionTime() >= _maxDetectTime;
-        return detectTimeReached;
+        return _canDetect;
     }
+    
 }

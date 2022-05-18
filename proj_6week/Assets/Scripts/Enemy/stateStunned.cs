@@ -35,6 +35,7 @@ public class stateStunned : IState
     }
     public void OnExit()
     {
+        _enem._isStunned = false;
         _nma.isStopped = false;
         _nma.enabled = false;
         _anim.SetFloat(animSpd, 0f);

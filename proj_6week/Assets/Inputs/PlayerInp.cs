@@ -176,6 +176,17 @@ public partial class @PlayerInp : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""05a27bc9-4b7d-4829-b47d-16041445b621"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""382e103c-0492-40ee-9c1e-e9c8c3236da5"",
                     ""path"": """",
                     ""interactions"": """",
@@ -231,8 +242,19 @@ public partial class @PlayerInp : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""4aded160-9b6f-4c21-affe-8dd9c88ac311"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""9a6625a3-a413-4ea3-9351-a9d1dc9ee1d5"",
-                    ""path"": """",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

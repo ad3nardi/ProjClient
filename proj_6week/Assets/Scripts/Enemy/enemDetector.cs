@@ -13,15 +13,18 @@ public class enemDetector : MonoBehaviour
     [Header("Settings")]
     private float maxSearchTime;
     private float maxDetectTime;
-    private float detectTime;
+    public float detectTime;
 
     private void Awake()
     {
+        /* cache shit */
         _enem = GetComponentInParent<Enemy>();
-    //   maxDetectTime = _enem._maxDetectTime;
-    //   maxSearchTime = _enem._maxSearchTime;
         playerInLOS = false;
         detectTime = 0;
+
+        /* inherit timings from main enemy class */
+        maxSearchTime = _enem._maxSearchTime;
+        maxDetectTime = _enem._maxDetectTime;
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -37,22 +40,31 @@ public class enemDetector : MonoBehaviour
     {
         if (playerInLOS == true)
         {
+            /* shoot ray to player location whilst in LoS */
             RaycastHit hit;
-            if (Physics.Raycast(_enem.transform.position, _pc.position, out hit))
+            if (Physics.Raycast(_enem.transform.position, _pc.position - _enem.transform.position, out hit))
             {
-                if (hit.transform.tag == "Player")
+                Debug.DrawRay(_enem.transform.position, _pc.position - _enem.transform.position);
+                /* check if ray hits player - checking cover */
+                if (hit.collider.tag == "Player")
                 {
-                    DetectionTime();
+                    /* add to detection time */
+                    detectTime += Time.deltaTime;
+
+                    /* check if reached detection time (LARGER VALUE) */
+                    if (detectTime >= maxDetectTime)
+                    {
+                        _enem._canDetect = true;
+                    }
+                    /* otherwise check if reached search time (SMALLER VALUE) */
+                    else if (detectTime >= maxSearchTime)
+                    {
+                        _enem._canSearch = true;
+                    }
                 }
             }
         }
         else return;
-    }
-    public float DetectionTime()
-    {
-        Debug.Log(detectTime);
-        detectTime += Time.deltaTime;
-        return detectTime;
     }
     public void ResetDetectionTimer()
     {
