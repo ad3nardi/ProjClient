@@ -6,15 +6,14 @@ using System;
 
 public class PlayerCon : MonoBehaviour
 {
-    /*Input Settings */
-    private float hor;
-    private float ver;
-    private bool _isCrouch;
+    [Header("Inputs")]
+    [SerializeField] public float hor;
+    [SerializeField] public float ver;
 
     [Header("Plugins")]
-    private Rigidbody rb;
-    private CapsuleCollider pcCap;
-    public CinemachineFreeLook freeCam;
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] private CapsuleCollider pcCap;
+    [SerializeField] public CinemachineFreeLook freeCam;
     [SerializeField] private Camera cam;
     [SerializeField] private Transform camTran;
     [SerializeField] private Animator anim;
@@ -30,26 +29,28 @@ public class PlayerCon : MonoBehaviour
     [SerializeField] private float moveSpd;
 
     [Header("Parkour Settings")]
+    [SerializeField] public bool isGrounded;
+    [SerializeField] private bool vaultAir;
+    [SerializeField] private bool _isCrouch;
     [SerializeField] private Vector3 headOff;
     [SerializeField] private Vector3 footOff;
-    [SerializeField] private bool vaultAir;
-    
-    [Header("Stat Settings")]
+
+    [Header("Combat Settings")]
     [SerializeField] private float maxHp;
     [SerializeField] private float curHP;
     [SerializeField] private float projkForce;
     [SerializeField] private float fireRate;
-    [SerializeField] private float _fireTimer;
+    [SerializeField] private float fireTimer;
 
 
     [Header("Attack Settings")]
-    [SerializeField] private bool  canAttack;
-    [SerializeField] public int    dmg;
+    [SerializeField] public  int   dmg;
     [SerializeField] private int   comboIndex;
     [SerializeField] private int   maxCombo;
     [SerializeField] private float comboTimer;
     [SerializeField] private float comboTime;
     [SerializeField] private float animTime;
+    [SerializeField] private bool  canAttack;
 
     [Header("Animation Cache")]
     private readonly int _hashStateTime = Animator.StringToHash("stateStage");
@@ -60,6 +61,7 @@ public class PlayerCon : MonoBehaviour
         /*CACHE SHIT */
         rb = GetComponent<Rigidbody>();
         pcCap = GetComponent<CapsuleCollider>();
+        rb.isKinematic = false;
 
         /* Setup Camera */
         cam = Camera.main;
@@ -117,15 +119,15 @@ public class PlayerCon : MonoBehaviour
     }
     public void Fire(bool inp)
     {
-        _fireTimer = 0;
-        if (_fireTimer >= fireRate)
+        fireTimer = 0;
+        if (fireTimer >= fireRate)
         {
             
             GameObject go = Instantiate(elecProj, transform.position, Quaternion.identity);
             go.GetComponent<Rigidbody>().AddForce(go.transform.forward * projkForce, ForceMode.Impulse);
-            _fireTimer = 0;
+            fireTimer = 0;
         }
-        _fireTimer += Time.deltaTime;
+        fireTimer += Time.deltaTime;
     }
     /* INPUT FOR ATTACK */
     private void Attack(bool inp)
@@ -142,6 +144,15 @@ public class PlayerCon : MonoBehaviour
     public void TakeDmg(float dmg)
     {
         curHP -= dmg;
+
+        if(curHP <= 0)
+        {
+            Die();
+        }
+    }
+    private void Die()
+    {
+
     }
 
     private void Update()

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 276170079}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: lookTar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   m_Component:
   - component: {fileID: 500587095}
   - component: {fileID: 500587096}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: hurtbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,6 +74,36 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 2, z: 1}
   m_Center: {x: 0, y: 0, z: 0.7}
+--- !u!1 &1954138196
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1954138197}
+  m_Layer: 6
+  m_Name: hands
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1954138197
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1954138196}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.903, z: 0.456}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 9138241819514899393}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4506531320861865626
 GameObject:
   m_ObjectHideFlags: 0
@@ -86,9 +116,10 @@ GameObject:
   - component: {fileID: 6844151394436100685}
   - component: {fileID: 2057217784384791807}
   - component: {fileID: 6806252933455962092}
+  - component: {fileID: 1419681060748799282}
   - component: {fileID: 1294579852105721407}
   - component: {fileID: 7674492988289261652}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: pc
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -109,6 +140,7 @@ Transform:
   - {fileID: 1292947427328741064}
   - {fileID: 276170079}
   - {fileID: 500587095}
+  - {fileID: 1954138197}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -154,6 +186,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 555ac1fa521d83a4092d6eed1ae7a68f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hor: 0
+  ver: 0
+  rb: {fileID: 0}
+  pcCap: {fileID: 0}
   freeCam: {fileID: 0}
   cam: {fileID: 0}
   camTran: {fileID: 0}
@@ -164,18 +200,68 @@ MonoBehaviour:
   walkSpd: 5
   runSpd: 10
   crouchSpd: 2
-  moveSpd: 0
   jumpForce: 5
+  moveSpd: 0
+  isGrounded: 0
+  vaultAir: 0
+  _isCrouch: 0
+  headOff: {x: 0, y: 0, z: 0}
+  footOff: {x: 0, y: 0, z: 0}
   maxHp: 100
   curHP: 0
-  fireRate: 1
   projkForce: 1
-  dmg: 0
-  comboIndex: 0
-  comboTimer: 0
-  comboTime: 0
+  fireRate: 1
+  fireTimer: 0
+  dmg: 5
+  comboIndex: 2
+  maxCombo: 0
+  comboTimer: 2
+  comboTime: 2
   animTime: 0
   canAttack: 0
+--- !u!114 &1419681060748799282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4506531320861865626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5af2644f3e2f61a449bc0a5184fd443b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pc: {fileID: 6806252933455962092}
+  rb: {fileID: 6844151394436100685}
+  handTrans: {fileID: 1954138197}
+  currentSort: 0
+  climbForce: 6
+  climbRange: 2.1
+  smallerEdge: 0.25
+  maxAngle: 30
+  minDist: 0.16
+  coolDown: 0.1
+  JumpForce: 400
+  verHandOffset: {x: 0, y: 0, z: 0.03}
+  horHandOffset: {x: 0, y: 0.2, z: 0.03}
+  fallHandOffset: {x: 0, y: 0.2, z: 0}
+  raycastPos: {x: 0, y: 1, z: 0}
+  targetPoint: {x: 0, y: 0, z: 0}
+  targetNorm: {x: 0, y: 0, z: 0}
+  spotLayer:
+    serializedVersion: 2
+    m_Bits: 16385
+  curSpotLayer:
+    serializedVersion: 2
+    m_Bits: 16384
+  checkLayersObstacle:
+    serializedVersion: 2
+    m_Bits: 16439
+  checkLayersReachable:
+    serializedVersion: 2
+    m_Bits: 55
+  lastTime: 0
+  beginDist: 0
 --- !u!198 &1294579852105721407
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -4960,7 +5046,7 @@ GameObject:
   - component: {fileID: 3490757350823926711}
   - component: {fileID: 5682529169054378033}
   - component: {fileID: 1731196695}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
