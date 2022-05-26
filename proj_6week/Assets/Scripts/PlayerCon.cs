@@ -13,10 +13,10 @@ public class PlayerCon : MonoBehaviour
     [Header("Plugins")]
     [SerializeField] private Rigidbody rb;
     [SerializeField] private CapsuleCollider pcCap;
-    [SerializeField] public CinemachineFreeLook freeCam;
+    [SerializeField] private Animator anim;
+    [SerializeField] public  CinemachineFreeLook freeCam;
     [SerializeField] private Camera cam;
     [SerializeField] private Transform camTran;
-    [SerializeField] private Animator anim;
     [SerializeField] private GameObject elecProj;
     [SerializeField] private GameObject hurtboxGO;
 
@@ -61,6 +61,7 @@ public class PlayerCon : MonoBehaviour
         /*CACHE SHIT */
         rb = GetComponent<Rigidbody>();
         pcCap = GetComponent<CapsuleCollider>();
+        anim = GetComponentInChildren<Animator>();
         rb.isKinematic = false;
 
         /* Setup Camera */
