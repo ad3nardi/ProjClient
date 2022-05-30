@@ -49,7 +49,7 @@ public class Enemy : MonoBehaviour
 
         /* cached shit */
         var navMeshAgent = GetComponent<NavMeshAgent>();
-        var animator = GetComponent<Animator>();
+        var animator = GetComponentInChildren<Animator>();
         var enemDetector = _enemDetector;
         var fireRate = _fireRate;
         var fleeParticleSystem = gameObject.GetComponentInChildren<ParticleSystem>();
