@@ -5,6 +5,10 @@ using System;
 
 public class WallClimber : MonoBehaviour
 {
+    [Header("Inputs")]
+    [SerializeField] public float hor;
+    [SerializeField] public float ver;
+
     [Header("Plugins")]
     [SerializeField] private PlayerCon pc;
     [SerializeField] private Rigidbody rb;
@@ -47,10 +51,15 @@ public class WallClimber : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         pc = GetComponent<PlayerCon>();
     }
+    public void Move(float h, float v)
+    {
+        hor = h;
+        ver = v;
+    }
 
     private void Update()
     {
-        if(currentSort == Climbingsort.Walking && pc.ver > 0)
+        if(currentSort == Climbingsort.Walking && ver > 0)
         {
             StartClimbing();
         }
@@ -78,14 +87,15 @@ public class WallClimber : MonoBehaviour
             currentSort = Climbingsort.Walking;
             //ENABLE PC MOVEMENT
             rb.isKinematic = false;
+            pc.enabled = true;
         }
 
-        if(currentSort == Climbingsort.Walking && pc.isGrounded)
+        if(currentSort == Climbingsort.Walking && !pc.isGrounded)
         {
             currentSort = Climbingsort.Jumping;
         }
 
-        if(currentSort == Climbingsort.Walking && pc.hor != 0 || pc.ver != 0)
+        if(currentSort == Climbingsort.Walking && hor != 0 || ver != 0)
         {
             CheckForClimbStart();
         }
@@ -93,12 +103,12 @@ public class WallClimber : MonoBehaviour
     
     private void StartClimbing()
     {
-        if(Physics.Raycast(transform.position + transform.rotation * raycastPos, transform.forward, 0.4f)
+        if(Physics.Raycast(transform.position + transform.rotation * raycastPos, transform.forward, 1f)
         && Time.time - lastTime > coolDown && currentSort == Climbingsort.Walking)
         {
             if(currentSort == Climbingsort.Walking)
             {
-                rb.AddForce(transform.up * jumpForce);
+                rb.AddForce(0, jumpForce, 0, ForceMode.VelocityChange);
             }
             lastTime = Time.time;
         }
@@ -135,7 +145,7 @@ public class WallClimber : MonoBehaviour
         if(Time.time - lastTime > coolDown && currentSort == Climbingsort.Climbing)
         {
             /* IF MOVE UP */
-            if (pc.ver > 0)
+            if (ver > 0)
             {
                 CheckForSpots(handTrans.position + transform.rotation * verHandOffset + transform.up * climbRange, -transform.up, climbRange, CheckingSort.normal);
                 
@@ -145,42 +155,44 @@ public class WallClimber : MonoBehaviour
                 }
             }
             /* IF MOVE DOWN */
-            if (pc.ver < 0)
+            if (ver < 0)
             {
                 CheckForSpots(handTrans.position - transform.rotation * (verHandOffset + new Vector3(0,0.3f,0)), -transform.up, climbRange, CheckingSort.normal);
                 
                 if(currentSort != Climbingsort.ClimbingTowardPoint)
                 {
                     rb.isKinematic = false;
+                    pc.enabled = true;
+
                     //ENABLE CHAR CON
                     currentSort = Climbingsort.Falling;
                     oldRot = transform.rotation;
                 }
             }
 
-            if(pc.hor != 0)
+            if(hor != 0)
             {
                 CheckForSpots(handTrans.position + transform.rotation * horHandOffset,
-                transform.right * pc.hor - transform.up /3.5f, climbRange/2, CheckingSort.normal);
+                transform.right * hor - transform.up /3.5f, climbRange/2, CheckingSort.normal);
                 if (currentSort != Climbingsort.ClimbingTowardPoint)
                 {
                     CheckForSpots(handTrans.position + transform.rotation * horHandOffset,
-                    transform.right * pc.hor - transform.up / 1.5f, climbRange / 3f, CheckingSort.normal);
+                    transform.right * hor - transform.up / 1.5f, climbRange / 3f, CheckingSort.normal);
                 }
                 if (currentSort != Climbingsort.ClimbingTowardPoint)
                 {
                     CheckForSpots(handTrans.position + transform.rotation * horHandOffset,
-                    transform.right * pc.hor - transform.up / 6f, climbRange / 1.5f, CheckingSort.normal);
+                    transform.right * hor - transform.up / 6f, climbRange / 1.5f, CheckingSort.normal);
                 }
 
                 if(currentSort != Climbingsort.ClimbingTowardPoint)
                 {
                     int hort = 0;
-                    if(pc.hor < 0)
+                    if(hor < 0)
                     {
                         hort = -1;
                     }
-                    if (pc.hor > 0)
+                    if (hor > 0)
                     {
                         hort = 1;
                     }
@@ -276,6 +288,7 @@ public class WallClimber : MonoBehaviour
                     //DISABLE MOVEMENT IN CONTROLLER
                     rb.isKinematic = true;
                     pc.isGrounded = false;
+                    pc.enabled = false;
                 }
                 currentSort = Climbingsort.ClimbingTowardPoint;
                 beginDist = Vector3.Distance(transform.position, (targetPoint - transform.rotation * handTrans.localPosition));
@@ -342,7 +355,7 @@ public class WallClimber : MonoBehaviour
         Vector3 dir = transform.forward - transform.up / 0.8f;
 
         /* Looking for the edge that we will hang off */
-        if (!Physics.Raycast(transform.position + transform.rotation * raycastPos, dir, 1.6f) /* && !JumpInp */) 
+        if (!Physics.Raycast(transform.position + transform.rotation * raycastPos, dir, 1.6f)  && pc.isGrounded) 
         {
             currentSort = Climbingsort.CheckingForClimbStart;
             if(Physics.Raycast(transform.position + new Vector3(0, 1.1f, 0), -transform.up, out hit2, 1.6f, spotLayer))

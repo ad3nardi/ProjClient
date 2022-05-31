@@ -40,7 +40,7 @@ GameObject:
   m_Component:
   - component: {fileID: 500587095}
   - component: {fileID: 500587096}
-  m_Layer: 6
+  m_Layer: 2
   m_Name: hurtbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69,7 +69,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 500587094}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 2, z: 1}
@@ -98,7 +98,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1954138196}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.8, z: 0.5}
+  m_LocalPosition: {x: 0, y: 1.7, z: 0.35}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9138241819514899393}
@@ -140,7 +140,7 @@ Transform:
   - {fileID: 276170079}
   - {fileID: 500587095}
   - {fileID: 1954138197}
-  - {fileID: 2933645223512406256}
+  - {fileID: 8231883552462285587}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -231,17 +231,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5af2644f3e2f61a449bc0a5184fd443b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hor: 0
+  ver: 0
   pc: {fileID: 6806252933455962092}
   rb: {fileID: 6844151394436100685}
   handTrans: {fileID: 1954138197}
   currentSort: 0
-  climbForce: 6
-  climbRange: 2.1
+  climbForce: 10
+  climbRange: 2.5
   smallerEdge: 0.25
   maxAngle: 30
   minDist: 0.16
-  coolDown: 0.1
-  jumpForce: 5
+  coolDown: 0.15
+  jumpForce: 7
   verHandOffset: {x: 0, y: 0, z: 0.03}
   horHandOffset: {x: 0, y: 0.2, z: 0.03}
   fallHandOffset: {x: 0, y: 0.2, z: 0}
@@ -5089,10 +5091,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5902484695176067452, guid: dd2f8db69f27f4f49931c2f3774a5db2, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bca6d05f920d10741956b24c8a98104e, type: 2}
+    - target: {fileID: 6975861697731283302, guid: dd2f8db69f27f4f49931c2f3774a5db2, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975861697731283302, guid: dd2f8db69f27f4f49931c2f3774a5db2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975861697731283302, guid: dd2f8db69f27f4f49931c2f3774a5db2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975861697731283302, guid: dd2f8db69f27f4f49931c2f3774a5db2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8109897714007816578, guid: dd2f8db69f27f4f49931c2f3774a5db2, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7ccb7d52e2b51974ea63370b5960bd00, type: 2}
+    - target: {fileID: 8668639315102136600, guid: dd2f8db69f27f4f49931c2f3774a5db2, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3ceddb58396dfaf44b4f54fa130a6e38, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd2f8db69f27f4f49931c2f3774a5db2, type: 3}
---- !u!4 &2933645223512406256 stripped
+--- !u!4 &8231883552462285587 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 4198724787206986373, guid: dd2f8db69f27f4f49931c2f3774a5db2, type: 3}
+  m_CorrespondingSourceObject: {fileID: 6975861697731283302, guid: dd2f8db69f27f4f49931c2f3774a5db2, type: 3}
   m_PrefabInstance: {fileID: 1365359499650785909}
   m_PrefabAsset: {fileID: 0}

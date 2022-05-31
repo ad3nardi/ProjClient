@@ -111,8 +111,9 @@ public class PlayerCon : MonoBehaviour
     }
     public void Jump(bool inp)
     {
-        if (Physics.Raycast(transform.position, Vector3.down, 1.1f))
+        if (isGrounded)
         {
+            isGrounded = false;
             rb.AddForce(0, jumpForce, 0, ForceMode.VelocityChange);
         }
         else
@@ -178,10 +179,12 @@ public class PlayerCon : MonoBehaviour
         /*always move toward direction */
         rb.MovePosition(rb.position + moveDir * moveSpd * Time.deltaTime);
 
+        isGrounded = Physics.Raycast(transform.position + Vector3.up, Vector3.down, 1.1f);
+
         /* RESET ANIMATION TIME AFTER THE FRAME ENDS */
-        animTime = Mathf.Repeat(anim.GetCurrentAnimatorStateInfo(0).normalizedTime, 1f);
-        anim.SetFloat(_hashStateTime, animTime);
-        anim.ResetTrigger(_hashAttack);
+        //animTime = Mathf.Repeat(anim.GetCurrentAnimatorStateInfo(0).normalizedTime, 1f);
+        //anim.SetFloat(_hashStateTime, animTime);
+        //anim.ResetTrigger(_hashAttack);
     }
     /* Reset Abliity to Move at end of attack animation*/
     private void animTimerEnded()

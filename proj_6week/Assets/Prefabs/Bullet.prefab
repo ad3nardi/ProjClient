@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 13748705}
   - component: {fileID: 13748708}
   - component: {fileID: 13748707}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 7732482967097952237}
   - component: {fileID: 6359379610404099604}
   - component: {fileID: 6405198309883135812}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -143,8 +143,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dmg: 5
   bulletSpd: 100
-  rb: {fileID: 6405198309883135812}
   maxLifeTime: 1
+  lifeTime: 0
 --- !u!54 &6405198309883135812
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -4,25 +4,26 @@ using UnityEngine;
 
 public class bulletProkj : MonoBehaviour
 {
-    public float dmg;
-    public float bulletSpd;
+    [SerializeField] public float dmg;
+    [SerializeField] public float bulletSpd;
 
-    [SerializeField] private float maxLifeTime; 
-    private float lifeTime = 0; 
+    [SerializeField] private float maxLifeTime;
+    [SerializeField] private float lifeTime = 0; 
     
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Player")
         {
             other.GetComponent<PlayerCon>().TakeDmg(dmg);
+            Destroy(gameObject);
         }
     }
     private void Update()
     {
-        lifeTime += maxLifeTime;
+        lifeTime += Time.deltaTime;
         if(lifeTime >= maxLifeTime)
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
     }
 }
