@@ -13,7 +13,7 @@ public class WallClimber : MonoBehaviour
     [SerializeField] private PlayerCon pc;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private Transform handTrans;
-    [SerializeField] private Climbingsort currentSort;
+    [SerializeField] public Climbingsort currentSort;
 
     [Header("Settings")]
     [SerializeField] private float climbForce;
@@ -59,11 +59,11 @@ public class WallClimber : MonoBehaviour
 
     private void Update()
     {
-        if(currentSort == Climbingsort.Walking && ver > 0)
+        if (currentSort == Climbingsort.Walking && ver > 0 && pc.isRunning)
         {
             StartClimbing();
         }
-        if(currentSort == Climbingsort.Climbing)
+        if (currentSort == Climbingsort.Climbing)
         {
             Climb();
         }
@@ -101,7 +101,7 @@ public class WallClimber : MonoBehaviour
         }
     }
     
-    private void StartClimbing()
+    public void StartClimbing()
     {
         if(Physics.Raycast(transform.position + transform.rotation * raycastPos, transform.forward, 1f)
         && Time.time - lastTime > coolDown && currentSort == Climbingsort.Walking)

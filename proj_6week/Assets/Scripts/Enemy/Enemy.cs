@@ -76,6 +76,7 @@ public class Enemy : MonoBehaviour
         _stateMachine.AddTransition(search,     hold,   isReachedSearchPoint);
 
         _stateMachine.AddTransition(atkMove,    attack, inAttackRange);
+        _stateMachine.AddTransition(attack,    atkMove, notInAttackRange);
 
         /* create ANY Transisionts - BREAK POINTS */
         _stateMachine.AddAnyTransition(stunned, isStunned);
@@ -117,6 +118,11 @@ public class Enemy : MonoBehaviour
     private bool inAttackRange()
     {
         bool reachedRange = Vector3.Distance(transform.position, atkMove._nma.destination) <= _range;
+        return reachedRange;
+    }
+    private bool notInAttackRange()
+    {
+        bool reachedRange = Vector3.Distance(transform.position, atkMove._nma.destination) > _range;
         return reachedRange;
     }
     private bool stunOut()

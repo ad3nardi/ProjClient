@@ -30,6 +30,7 @@ public class PlayerCon : MonoBehaviour
 
     [Header("Parkour Settings")]
     [SerializeField] public bool isGrounded;
+    [SerializeField] public bool isRunning;
     [SerializeField] private bool vaultAir;
     [SerializeField] private bool _isCrouch;
     [SerializeField] private Vector3 headOff;
@@ -73,6 +74,7 @@ public class PlayerCon : MonoBehaviour
         curHP = maxHp;
         moveSpd = walkSpd;
         vaultAir = false;
+        isRunning = false;
         headOff = new Vector3(0, 0.5f, 0);
         footOff = new Vector3(0, -0.5f, 0);
 
@@ -91,9 +93,13 @@ public class PlayerCon : MonoBehaviour
         if (inp)
         {
             moveSpd = runSpd;
+            isRunning = true;
         }
         else
+        {
             moveSpd = walkSpd;
+            isRunning = false;
+        }
     }
     public void Crouch(bool inp)
     {
@@ -135,13 +141,31 @@ public class PlayerCon : MonoBehaviour
     private void Attack(bool inp)
     {
         //FREEZE MOVEMENT
-        rb.constraints = RigidbodyConstraints.FreezePosition;
+        //rb.constraints = RigidbodyConstraints.FreezePosition;
+        rb.isKinematic = true;
+
         //INCREASE COMBO INDEX
         comboIndex += 1;
         if (comboIndex > maxCombo)
             comboIndex = 0;
         // CALL ATTACK ANIMATION FOR CORRESPONDING INDEX
         anim.SetInteger(_hashAttack, comboIndex);
+    }
+    /* Reset Abliity to Move at end of attack animation*/
+    private void animTimerEnded()
+    {
+        /* Test if constraints or kinematic is best
+        rb.constraints &= ~RigidbodyConstraints.FreezePosition;
+        moveSpd = walkSpd;
+        */
+        rb.isKinematic = false;
+        comboIndex = 0;
+        anim.SetInteger(_hashAttack, 0);
+    }
+    /*toggle on and off in animation clip */
+    public void HurtboxToggleEvent()
+    {
+        hurtboxGO.SetActive(!hurtboxGO.activeInHierarchy);
     }
     public void TakeDmg(float dmg)
     {
@@ -180,23 +204,12 @@ public class PlayerCon : MonoBehaviour
         rb.MovePosition(rb.position + moveDir * moveSpd * Time.deltaTime);
 
         isGrounded = Physics.Raycast(transform.position + Vector3.up, Vector3.down, 1.1f);
-
+    }
+    private void LateUpdate()
+    {
         /* RESET ANIMATION TIME AFTER THE FRAME ENDS */
         //animTime = Mathf.Repeat(anim.GetCurrentAnimatorStateInfo(0).normalizedTime, 1f);
         //anim.SetFloat(_hashStateTime, animTime);
         //anim.ResetTrigger(_hashAttack);
-    }
-    /* Reset Abliity to Move at end of attack animation*/
-    private void animTimerEnded()
-    {
-        rb.constraints &= ~RigidbodyConstraints.FreezePosition;
-        moveSpd = walkSpd;
-        comboIndex = 0;
-        anim.SetInteger(_hashAttack, 0);
-    }
-    /*toggle on and off in animation clip */
-    public void HurtboxToggleEvent()
-    {
-        hurtboxGO.SetActive(!hurtboxGO.activeInHierarchy);
     }
 }
