@@ -48,14 +48,20 @@ public class PlayerCon : MonoBehaviour
     [SerializeField] public  int   dmg;
     [SerializeField] private int   comboIndex;
     [SerializeField] private int   maxCombo;
+    [SerializeField] public float  animTime;
     [SerializeField] private float comboTimer;
     [SerializeField] private float comboTime;
-    [SerializeField] private float animTime;
     [SerializeField] private bool  canAttack;
 
     [Header("Animation Cache")]
-    private readonly int _hashStateTime = Animator.StringToHash("stateStage");
+    private readonly int _hashStateTime = Animator.StringToHash("curAnim");
+    private readonly int _speed         = Animator.StringToHash("speed");
     private readonly int _hashAttack    = Animator.StringToHash("attack");
+    private readonly int _hashAtkCount  = Animator.StringToHash("attackCount");
+    private readonly int _hashJump      = Animator.StringToHash("jump");
+    private readonly int _hashAirborne  = Animator.StringToHash("airborne");
+    private readonly int _hashClimb     = Animator.StringToHash("climb");
+    private readonly int _hashShock     = Animator.StringToHash("shock");
 
     private void Awake()
     {
@@ -64,6 +70,7 @@ public class PlayerCon : MonoBehaviour
         pcCap = GetComponent<CapsuleCollider>();
         anim = GetComponentInChildren<Animator>();
         rb.isKinematic = false;
+        anim.SetFloat(_speed, 0);
 
         /* Setup Camera */
         cam = Camera.main;
@@ -81,9 +88,9 @@ public class PlayerCon : MonoBehaviour
         /* Attack Cache */
         comboIndex = 0;
         comboTimer = 0f;
-    }
-    /* Take in move inputs */
-    public void Move(float h, float v)
+}
+/* Take in move inputs */
+public void Move(float h, float v)
     {
         hor = h;
         ver = v;
@@ -94,6 +101,7 @@ public class PlayerCon : MonoBehaviour
         {
             moveSpd = runSpd;
             isRunning = true;
+            anim.SetFloat(_speed, 1);
         }
         else
         {
@@ -138,18 +146,19 @@ public class PlayerCon : MonoBehaviour
         fireTimer += Time.deltaTime;
     }
     /* INPUT FOR ATTACK */
-    private void Attack(bool inp)
+    public void Attack(bool inp)
     {
         //FREEZE MOVEMENT
         //rb.constraints = RigidbodyConstraints.FreezePosition;
         rb.isKinematic = true;
+        anim.SetTrigger(_hashAttack);
 
         //INCREASE COMBO INDEX
         comboIndex += 1;
         if (comboIndex > maxCombo)
             comboIndex = 0;
         // CALL ATTACK ANIMATION FOR CORRESPONDING INDEX
-        anim.SetInteger(_hashAttack, comboIndex);
+        anim.SetInteger(_hashAtkCount, comboIndex);
     }
     /* Reset Abliity to Move at end of attack animation*/
     private void animTimerEnded()
@@ -160,7 +169,6 @@ public class PlayerCon : MonoBehaviour
         */
         rb.isKinematic = false;
         comboIndex = 0;
-        anim.SetInteger(_hashAttack, 0);
     }
     /*toggle on and off in animation clip */
     public void HurtboxToggleEvent()
@@ -199,7 +207,10 @@ public class PlayerCon : MonoBehaviour
         if (hor != 0 || ver != 0)
         {
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateDir, rotateSpd * Time.deltaTime);
+            anim.SetFloat(_speed, 0.5f);
         }
+        else
+            anim.SetFloat(_speed, 0);
         /*always move toward direction */
         rb.MovePosition(rb.position + moveDir * moveSpd * Time.deltaTime);
 
@@ -208,8 +219,8 @@ public class PlayerCon : MonoBehaviour
     private void LateUpdate()
     {
         /* RESET ANIMATION TIME AFTER THE FRAME ENDS */
-        //animTime = Mathf.Repeat(anim.GetCurrentAnimatorStateInfo(0).normalizedTime, 1f);
-        //anim.SetFloat(_hashStateTime, animTime);
-        //anim.ResetTrigger(_hashAttack);
+        animTime = Mathf.Repeat(anim.GetCurrentAnimatorStateInfo(0).normalizedTime, 1f);
+        anim.SetFloat(_hashStateTime, animTime);
+        anim.ResetTrigger(_hashAttack);
     }
 }
