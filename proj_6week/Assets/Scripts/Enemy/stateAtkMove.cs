@@ -11,7 +11,7 @@ public class stateAtkMove : IState
     private enemDetector _ED;
     private readonly List<Transform> _SN;
 
-    private readonly int Speed = Animator.StringToHash("speed");
+    private readonly int _hashSpeed = Animator.StringToHash("speed");
 
     private Transform closestNode;
     public float TimeInSearch;
@@ -35,12 +35,12 @@ public class stateAtkMove : IState
         Debug.Log("atkMoving");
         _nma.enabled = true;
         _nma.SetDestination(_ED._pc.position);
-        _anim.SetFloat(Speed, 1f);
+        _anim.SetFloat(_hashSpeed, 1f);
     }
 
     public void OnExit()
     {
         _nma.enabled = false;
-        _anim.SetFloat(Speed, 0f);
+        _anim.SetFloat(_hashSpeed, 0f);
     }
 }

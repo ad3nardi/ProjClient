@@ -8,7 +8,7 @@ public class statePatrol : IState
     private readonly Enemy _enem;
     public NavMeshAgent _nma;
     private readonly Animator _anim;
-    private readonly int Speed = Animator.StringToHash("speed");
+    private readonly int _hashSpeed = Animator.StringToHash("speed");
 
     private Vector3 _lastPos = Vector3.zero;
     public float TimeStuck;
@@ -37,13 +37,13 @@ public class statePatrol : IState
 
 
         _nma.SetDestination(_enem.PatrolNodes[_curNodeIndex].position);
-        _anim.SetFloat(Speed, 1f);
+        _anim.SetFloat(_hashSpeed, 1f);
     }
 
     public void OnExit()
     {
         _nma.enabled = false;
-        _anim.SetFloat (Speed, 0f);
+        _anim.SetFloat (_hashSpeed, 0f);
 
         _curNodeIndex++;
         /* wrap around nodes list when we reach max */

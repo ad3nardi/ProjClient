@@ -13,7 +13,9 @@ public class Enemy : MonoBehaviour
     private StateMachine _stateMachine;
     private enemDetector _enemDetector;
     public GameObject _bulletPref;
+    public ParticleSystem _muzzleFlash;
     public Transform _gunTrans;
+    public Animator _anim;
     public List<Transform> PatrolNodes = new List<Transform>();
     public List<Transform> SearchNodes = new List<Transform>();
 
@@ -40,30 +42,34 @@ public class Enemy : MonoBehaviour
     stateAttack attack;
     stateStunned stunned;
 
+
+    /*Animation Cache*/
+    private readonly int _hashShoot = Animator.StringToHash("shoot");
+
+
     private void Awake()
     {
         _canSearch = false;
         _canDetect = false;
         _isStunned = false;
         _enemDetector = GetComponentInChildren<enemDetector>();
+        _anim = GetComponentInChildren<Animator>();
 
         /* cached shit */
         var navMeshAgent = GetComponent<NavMeshAgent>();
-        var animator = GetComponentInChildren<Animator>();
         var enemDetector = _enemDetector;
         var fireRate = _fireRate;
-        var fleeParticleSystem = gameObject.GetComponentInChildren<ParticleSystem>();
 
         _stateMachine = new StateMachine();
 
         /* create the states */
-        hold    = new stateHold     (this, animator);
-        patrol  = new statePatrol   (this, navMeshAgent, animator);
-        search  = new stateSearch   (this, navMeshAgent, animator, enemDetector, SearchNodes);
-        detect  = new stateDetect   (this, navMeshAgent, animator);
-        atkMove = new stateAtkMove  (this, navMeshAgent, animator, enemDetector);
-        attack  = new stateAttack   (this, animator,     fireRate);
-        stunned = new stateStunned  (this, navMeshAgent, animator);
+        hold    = new stateHold     (this, _anim);
+        patrol  = new statePatrol   (this, navMeshAgent, _anim);
+        search  = new stateSearch   (this, navMeshAgent, _anim, enemDetector, SearchNodes);
+        detect  = new stateDetect   (this, navMeshAgent, _anim);
+        atkMove = new stateAtkMove  (this, navMeshAgent, _anim, enemDetector);
+        attack  = new stateAttack   (this, _anim,     fireRate);
+        stunned = new stateStunned  (this, navMeshAgent, _anim);
 
         /* create the transitions */
         _stateMachine.AddTransition(hold,       patrol, isHeldPoint);
@@ -76,7 +82,7 @@ public class Enemy : MonoBehaviour
         _stateMachine.AddTransition(search,     hold,   isReachedSearchPoint);
 
         _stateMachine.AddTransition(atkMove,    attack, inAttackRange);
-        _stateMachine.AddTransition(attack,    atkMove, notInAttackRange);
+        //_stateMachine.AddTransition(attack,    atkMove, notInAttackRange);
 
         /* create ANY Transisionts - BREAK POINTS */
         _stateMachine.AddAnyTransition(stunned, isStunned);
@@ -86,11 +92,14 @@ public class Enemy : MonoBehaviour
 
         /* initial state */
         _stateMachine.SetState(patrol);
+
+
     }
 
     private void Update()
     {
         _stateMachine.Tick();
+
     }
     /* ACTION FUNCTIONS */
     public void Fire()
@@ -98,6 +107,8 @@ public class Enemy : MonoBehaviour
         transform.LookAt(_pc.transform.position);
         GameObject go = Instantiate(_bulletPref, _gunTrans.transform.position, _gunTrans.rotation);
         go.GetComponent<Rigidbody>().AddForce(_gunTrans.transform.forward * _bulletSpd, ForceMode.Impulse);
+        _anim.SetTrigger(_hashShoot);
+        _muzzleFlash.Play();
     }
 
     /* CONDITIONS */

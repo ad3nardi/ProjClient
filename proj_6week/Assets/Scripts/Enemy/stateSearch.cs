@@ -11,7 +11,8 @@ public class stateSearch : IState
     private enemDetector _ED;
     private readonly List<Transform> _SN;
 
-    private readonly int Speed = Animator.StringToHash("speed");
+    private readonly int _hashSpeed = Animator.StringToHash("speed");
+    private readonly int _hashSearch = Animator.StringToHash("searching");
 
     private Transform closestNode;
     public float TimeInSearch;
@@ -51,13 +52,16 @@ public class stateSearch : IState
         TimeInSearch = 0f;
         _nma.enabled = true;
         //_nma.SetDestination(closestNode.position);
-        _anim.SetFloat(Speed, 1f);
+        _anim.SetFloat(_hashSpeed, 1f);
+        _anim.SetBool(_hashSearch, true);
+
     }
 
     public void OnExit()
     {
         _nma.enabled = false;
-        _anim.SetFloat(Speed, 0f);
+        _anim.SetFloat(_hashSpeed, 0f);
+        _anim.SetBool(_hashSearch, false);
 
         /* wrap around nodes list when we reach max */
         if (_curNodeIndex == _enem.PatrolNodes.Count)
